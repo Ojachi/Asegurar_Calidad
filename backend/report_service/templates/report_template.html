@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reporte de Evaluación</title>
+</head>
+<body>
+    <h1>Reporte de Evaluación</h1>
+    <h2>Resultados de Evaluación</h2>
+    <ul>
+        {% for item in evaluation_results %}
+        <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Resultados de Matriz de Riesgos</h2>
+    <ul>
+        {% for risk in risk_results %}
+        <li>{{ risk }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

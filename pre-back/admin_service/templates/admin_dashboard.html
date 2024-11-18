@@ -1,0 +1,107 @@
+<head>
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/estilos.css') }}"
+  />
+</head>
+<h2>Gestión de Preguntas</h2>
+<form id="form_pregunta" onsubmit="registroPregunta(event)">
+  <input type="text" name="model" placeholder="Modelo" required />
+  <input type="text" name="requirement" placeholder="Requisito" required />
+  <textarea name="question_text" placeholder="Pregunta" required></textarea>
+  <input type="number" name="weight" placeholder="Peso" required />
+  <button type="submit">Agregar Pregunta</button>
+</form>
+
+<h2>ver preguntas de modelos</h2>
+<form id="verPreguntasModelo" onsubmit="verPreguntas(event)">
+  <input type="text" name="modelPre" placeholder="Modelo" required />
+  <button type="submit">ver preguntas</button>
+</form>
+
+<!-- Modal -->
+<div id="responseModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p id="modalMessage"></p>
+  </div>
+</div>
+<!-- fin modal -->
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+<!-- guaradar token -->
+<script>
+  // Función para obtener el valor de un parámetro de la URL
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  // Obtener el token desde la URL
+  const token = getQueryParam("token");
+
+  // Si el token existe, guárdalo en el localStorage
+  if (token) {
+    localStorage.setItem("token", token);
+    console.log("Token guardado en localStorage:", token);
+
+    // Opcional: redirige a una página sin el token en la URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else {
+    console.log("No se encontró un token en la URL");
+  }
+</script>
+
+<!-- Registro de Pregunta -->
+<script>
+  async function registroPregunta(event) {
+    event.preventDefault();
+    const form = document.getElementById("form_pregunta");
+    const formData = new FormData(form);
+    const data = {
+      model: formData.get("model"),
+      requirement: formData.get("requirement"),
+      question_text: formData.get("question_text"),
+      weight: formData.get("weight"),
+    };
+
+    try {
+      const response = await fetch("/admin/questions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+      showModal(result.message);
+    } catch (error) {
+      showModal("Error en el servidor. Por favor, intenta de nuevo.");
+    }
+  }
+</script>
+
+<!-- ver preguntas de modelo -->
+<script>
+  async function verPreguntas(event) {
+    event.preventDefault();
+    const form = document.getElementById("verPreguntasModelo");
+    const formData = new FormData(form);
+    const data = {
+      model: formData.get("modelPre"),
+    };
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        `/admin/questions/${data.model}?token=${token}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const result = await response.json();
+      showModal(result.message, result.data.questions);
+    } catch (error) {
+      showModal("Error en el servidor. Por favor, intenta de nuevo.");
+    }
+  }
+</script>
