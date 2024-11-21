@@ -1,5 +1,0 @@
-Flask
-pymysql
-Flask-JWT-Extended
-Flask-Cors
-reportlab

@@ -5,5 +5,5 @@ def handle_error(message, status_code):
     response.status_code = status_code
     return response
 
-def success_response(data):
-    return jsonify({"data": data})
+def success_response(data): 
+    return jsonify({"data": data}), 200

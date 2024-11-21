@@ -7,18 +7,21 @@ admin_bp = Blueprint('admin', __name__)
 @admin_bp.route('/questions', methods=['GET'])
 def list_questions():
     questions = get_questions()
-    return success_response(questions)
+    if (questions):
+        return questions, 200
+    else: 
+        return handle_error("No hay preguntas registradas", 404)
 
 @admin_bp.route('/questions', methods=['POST'])
 def create_question():
     data = request.json
-    text = data.get('text')
-    model = data.get('model')
+    description = data.get('description')
+    requirement = data.get('requirement')
 
-    if not text or not model:
+    if not description or not requirement:
         return handle_error("Faltan datos", 400)
 
-    add_question(text, model)
+    add_question(description, requirement)
     return success_response("Pregunta creada exitosamente")
 
 @admin_bp.route('/questions/<int:question_id>', methods=['PUT'])

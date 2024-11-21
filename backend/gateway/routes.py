@@ -14,6 +14,7 @@ def auth_service(path):
         json=request.json,
         headers=request.headers
     )
+    print(response.json())
     return jsonify(response.json()), response.status_code
 
 # Rutas para el servicio de administración
@@ -21,14 +22,21 @@ def auth_service(path):
 def admin_service(path):
     if not is_authenticated():
         return handle_error("No autorizado", 401)
+    
+    if request.method == 'GET':
+        response = requests.request(
+            method=request.method,
+            url=f"{ADMIN_SERVICE_URL}/{path}"
+        )
+    else:
+        response = requests.request(
+            method=request.method,
+            url=f"{ADMIN_SERVICE_URL}/{path}",
+            json=request.json,
+            headers=request.headers
+        )
 
-    response = requests.request(
-        method=request.method,
-        url=f"{ADMIN_SERVICE_URL}/{path}",
-        json=request.json,
-        headers=request.headers
-    )
-    return jsonify(response.json()), response.status_code
+    return response.json(), response.status_code
 
 # Rutas para el servicio de evaluación
 @gateway_bp.route('/evaluation/<path:path>', methods=['GET', 'POST'])

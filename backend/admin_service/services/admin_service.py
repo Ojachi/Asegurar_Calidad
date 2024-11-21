@@ -1,7 +1,7 @@
 from models.question_model import create_question, get_all_questions, update_question, delete_question
 
-def add_question(text, model):
-    create_question(text, model)
+def add_question(text, requirement):
+    create_question(text, requirement)
     return True
 
 def get_questions():

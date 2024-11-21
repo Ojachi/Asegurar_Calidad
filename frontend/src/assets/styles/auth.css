@@ -1,0 +1,307 @@
+body {
+  margin: 0;
+}
+
+/* login */
+
+.LoginApp {
+    font-family: sans-serif;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: -0px ;
+    background-image: url(../images/bg4.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+  }
+  
+  @import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  
+  .LoginApp h1 {
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .LoginApp h2 {
+    text-align: center;
+  }
+  
+  .LoginApp p {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+  }
+  
+  .LoginApp span {
+    font-size: 12px;
+  }
+  
+  .LoginApp a {
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+  }
+  
+  .LoginApp button {
+    border-radius: 20px;
+    border: 1px solid #1b17e0;
+    background-color: #1b17e0;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
+  }
+  
+  .LoginApp button:active {
+    transform: scale(0.95);
+  }
+  
+  .LoginApp button:focus {
+    outline: none;
+  }
+  
+  .LoginApp button.ghost {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: black;
+  }
+  
+  .LoginApp form {
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    text-align: center;
+  }
+  
+  .LoginApp input {
+    background-color: #eee;
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+  }
+  
+  .Login_container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 480px;
+  }
+  
+  .form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+  }
+  
+  .sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+  }
+  
+  .Login_container.right-panel-active .sign-in-container {
+    transform: translateX(100%);
+  }
+  
+  .sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+  }
+  
+  .Login_container.right-panel-active .sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.6s;
+  }
+  
+  @keyframes show {
+    0%,
+    49.99% {
+      opacity: 0;
+      z-index: 1;
+    }
+  
+    50%,
+    100% {
+      opacity: 1;
+      z-index: 5;
+    }
+  }
+  
+  .overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+  }
+  
+  .Login_container.right-panel-active .overlay-container {
+    transform: translateX(-100%);
+  }
+  
+  .overlay {
+    background: linear-gradient(to right, #3944eb, #1e0470);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 0;
+    color: #ffffff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+  }
+  
+  .Login_container.right-panel-active .overlay {
+    transform: translateX(50%);
+  }
+  
+  .overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+  }
+  
+  .overlay-left {
+    transform: translateX(-20%);
+  }
+  
+  .Login_container.right-panel-active .overlay-left {
+    transform: translateX(0);
+  }
+  
+  .overlay-right {
+    right: 0;
+    transform: translateX(0);
+  }
+  
+  .Login_container.right-panel-active .overlay-right {
+    transform: translateX(20%);
+  }
+  
+  .social-container {
+    margin: 20px 0;
+  }
+  
+  .social-container a {
+    border: 1px solid #dddddd;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+    height: 40px;
+    width: 40px;
+  }
+
+  /* NOt found page */
+  .NotFound_Container {
+    font-family: sans-serif;
+    font-size: x-large;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 70vh; 
+  }
+
+  /* Home page */
+  .centrar-imagen { 
+    display: block; 
+    margin-left: auto; 
+    margin-right: auto; 
+}
+
+.presentacion {
+    padding: 20px;
+}
+
+.presentacion {
+    padding: 20px;
+}
+.content {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se apilen en pantallas pequeñas */
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.content img {
+    width: 300px; /* Ajusta el tamaño de la imagen */
+    height: auto;
+    border-radius: 8px;
+}
+.content p {
+    flex: 1;
+    min-width: 250px; /* Tamaño mínimo del texto para un buen diseño en móviles */
+}
+
+/* Estilos Responsivos */
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column; /* Apilar en columnas para pantallas pequeñas */
+    }
+    .content img {
+        width: 100%; /* La imagen ocupará el ancho completo */
+        max-width: 400px;
+    }
+}
+  
+/* about us */
+.carousel-inner img {
+  height: 200px; /* Ajusta la altura según tus necesidades */
+  object-fit: cover;
+}
+
+.rounded-custom {
+  width: 100%;
+  max-width: 400px; /* Ajusta el tamaño máximo de la imagen */
+  border-radius: 50% 25% / 10% 40%; /* Bordes redondeados con estilo elíptico */
+  object-fit: cover; /* Ajusta la imagen para que no se deforme */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra suave para resaltar la imagen */
+}
+

@@ -1,6 +1,0 @@
-Flask
-Flask-JWT-Extended
-Flask-Cors
-pymysql
-bcrypt
-requests

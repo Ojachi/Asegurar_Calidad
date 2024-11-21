@@ -1,7 +1,7 @@
 from models.software_model import create_software, get_software_by_user, delete_software
 
-def register_software(user_id, name, version, description, developer, contact, owner, license):
-    create_software(user_id, name, version, description, developer, contact, owner, license)
+def register_software(user_id, name, version, description, developer, contact, company, date_register):
+    create_software(user_id, name, version, description, developer, contact, company, date_register)
     return True
 
 def get_user_software(user_id):
