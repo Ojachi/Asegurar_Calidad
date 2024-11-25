@@ -7,25 +7,23 @@ import {
 } from "react-router-dom";
 import AdminHome from "./pages/AdminHome";
 import UserHome from "./pages/UserHome";
-import SoftwareRegistration from "./components/SoftwareRegistration";
-import EvaluationForm from "./components/EvaluationForm";
 import RiskMatrix from "./components/RiskMatrix";
 import Report from "./pages/Report";
 import AdminManageQuestions from "./pages/AdminManageQuestions";
 import UserEvaluationResults from "./pages/UserEvaluationResults";
-import AdminViewEvaluations from "./pages/AdminViewEvaluations";
-import UserViewSoftware from "./pages/UserViewSoftware";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/home";
 import Navbar from "./components/Navbar";
 import AboutUs from "./pages/AboutUs";
+import EvaluationPage from "./pages/EvaluationPage";
+import EvaluationForm from "./components/EvaluationForm";
+import { getUserRole } from './services/authService';
 
 function AppRoutes() {
   // Obtener el rol del usuario desde el localStorage
-  const role = localStorage.getItem("role");
-
+  const role = getUserRole();
   return (
     <Router>
       <Routes>
@@ -34,34 +32,29 @@ function AppRoutes() {
           <Route path="/login" element={<AuthPage />} />
           <Route path="/NotFound" element={<NotFound />} />
           <Route index element={<Home />} />
-          <Route path='/AboutUs' element={<AboutUs/>}/>
-          
+          <Route path="/AboutUs" element={<AboutUs />} />
 
           {/* Dashboard del Usuario */}
           <Route
             path="/user"
             element={
               <ProtectedRoute>
-                {role === "1" ? <UserHome /> : <Navigate to="/admin" />}
+                <UserHome /> 
               </ProtectedRoute>
             }
           />
 
           {/* Rutas para Usuarios Normales */}
           <Route
-            path="/user/register-software"
+            path="/user/evaluate-software"
             element={
               <ProtectedRoute>
-                {role === "1" ? (
-                  <SoftwareRegistration />
-                ) : (
-                  <Navigate to="/login" />
-                )}
+                {role === "1" ? <EvaluationPage /> : <Navigate to="/login" />}
               </ProtectedRoute>
             }
           />
           <Route
-            path="/user/evaluate-software"
+            path="/user/evaluate"
             element={
               <ProtectedRoute>
                 {role === "1" ? <EvaluationForm /> : <Navigate to="/login" />}
@@ -96,25 +89,16 @@ function AppRoutes() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/user/view-software"
-            element={
-              <ProtectedRoute>
-                {role === "1" ? <UserViewSoftware /> : <Navigate to="/admin" />}
-              </ProtectedRoute>
-            }
-          />
           {/* Redirección por defecto si la ruta no existe */}
           <Route path="*" element={<Navigate to="/NotFound" />} />
         </Route>
-
 
         {/* Dashboard del Administrador */}
         <Route
           path="/admin"
           element={
             <ProtectedRoute>
-              {role === "0" ? <AdminHome /> : <Navigate to="/user" />}
+              <AdminHome />
             </ProtectedRoute>
           }
         />
@@ -125,18 +109,6 @@ function AppRoutes() {
             <ProtectedRoute>
               {role === "0" ? (
                 <AdminManageQuestions />
-              ) : (
-                <Navigate to="/user" />
-              )}
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/view-evaluations"
-          element={
-            <ProtectedRoute>
-              {role === "0" ? (
-                <AdminViewEvaluations />
               ) : (
                 <Navigate to="/user" />
               )}

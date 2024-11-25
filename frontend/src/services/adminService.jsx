@@ -58,18 +58,4 @@ export const deleteQuestion = async (questionId) => {
   }
 };
 // Obtener todas las evaluaciones realizadas por los usuarios
-export const getAllEvaluations = async () => {
-  try {
-    const token = getToken();
-    const response = await axios.get(`${API_URL}/evaluations`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return response.data.data;
-  } catch (error) {
-    console.error(
-      "Error al obtener evaluaciones:",
-      error.response?.data || error.message
-    );
-    throw error;
-  }
-};
+

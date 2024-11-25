@@ -21,7 +21,6 @@ const AdminHome = () => {
             <h2>Dashboard del Administrador</h2>
             <div className="admin-actions">
                 <button onClick={() => navigate('/admin/manage-questions')}>Gestionar Preguntas</button>
-                <button onClick={() => navigate('/admin/view-evaluations')}>Ver Resultados</button>
                 <button onClick={handleLogout}>Cerrar Sesión</button>
             </div>
         </div>

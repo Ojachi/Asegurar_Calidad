@@ -44,12 +44,18 @@ def evaluation_service(path):
     if not is_authenticated():
         return handle_error("No autorizado", 401)
 
-    response = requests.request(
-        method=request.method,
-        url=f"{EVALUATION_SERVICE_URL}/{path}",
-        json=request.json,
-        headers=request.headers
-    )
+    if request.method == 'GET':
+        response = requests.request(
+            method=request.method,
+            url=f"{EVALUATION_SERVICE_URL}/{path}"
+        )
+    else:
+        response = requests.request(
+            method=request.method,
+            url=f"{EVALUATION_SERVICE_URL}/{path}",
+            json=request.json,
+            headers=request.headers
+        )
     return jsonify(response.json()), response.status_code
 
 # Rutas para el servicio de riesgos
@@ -85,11 +91,17 @@ def report_service(path):
 def user_service(path):
     if not is_authenticated():
         return handle_error("No autorizado", 401)
-
-    response = requests.request(
-        method=request.method,
-        url=f"{USER_SERVICE_URL}/{path}",
-        json=request.json,
-        headers=request.headers
-    )
+    
+    if request.method == 'GET':
+        response = requests.request(
+            method=request.method,
+            url=f"{USER_SERVICE_URL}/{path}"
+        )
+    else:
+        response = requests.request(
+            method=request.method,
+            url=f"{USER_SERVICE_URL}/{path}",
+            json=request.json,
+            headers=request.headers
+        )
     return jsonify(response.json()), response.status_code

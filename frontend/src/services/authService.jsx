@@ -28,6 +28,7 @@ export const login = async (cedula, password) => {
       // Guardar el token y el rol en localStorage
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("role", response.data.role);
+      localStorage.setItem("id", cedula);
     }
     return response.data;
   } catch (error) {
@@ -43,6 +44,7 @@ export const login = async (cedula, password) => {
 export const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("role");
+  localStorage.removeItem("id");
 };
 
 // Función para obtener el token desde localStorage

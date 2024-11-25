@@ -53,7 +53,7 @@ const Navbar = () => {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/user/register-software">
+                <a className="nav-link" href="/user">
                   Registro de software
                 </a>
               </li>

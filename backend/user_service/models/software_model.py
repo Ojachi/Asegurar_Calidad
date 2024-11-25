@@ -16,7 +16,7 @@ def create_software(user_id, name, version, description, developer, contact, com
 def get_software_by_user(user_id):
     connection = get_db_connection()
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM software WHERE id_user = %s", (user_id,))
+        cursor.execute("SELECT * FROM software WHERE id_user = %s", (user_id))
         software_list = cursor.fetchall()
     connection.close()
     return software_list
@@ -27,3 +27,11 @@ def delete_software(software_id):
         cursor.execute("DELETE FROM software WHERE id = %s", (software_id,))
         connection.commit()
     connection.close()
+
+def get_models():
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM model")
+        model_list = cursor.fetchall()
+    connection.close()
+    return model_list
