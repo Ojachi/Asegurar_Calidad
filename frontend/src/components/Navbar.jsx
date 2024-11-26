@@ -20,8 +20,14 @@ const Navbar = () => {
       );
     } else {
       return (
-        <Link onClick={handleLogout} className="nav-link">
-          Cerrar Sesion
+        <Link
+          to="/" // Redirige a la página de inicio de sesión
+          onClick={() => {
+            handleLogout(); // Ejecuta la lógica de logout
+          }}
+          className="nav-link"
+        >
+          Cerrar Sesión
         </Link>
       );
     }
@@ -63,7 +69,7 @@ const Navbar = () => {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/">
+                <a className="nav-link" href="/user/view-evaluations">
                   Resultados
                 </a>
               </li>
@@ -72,9 +78,7 @@ const Navbar = () => {
                   Sobre nosotros
                 </a>
               </li>
-              <li className="nav-item">
-                {Login()}
-              </li>
+              <li className="nav-item">{Login()}</li>
             </ul>
           </div>
         </div>
@@ -86,7 +90,9 @@ const Navbar = () => {
         <div className="container text-center text-md-start">
           <div className="row text-center text-md-start">
             <div className="col-md-4 col-lg-4 col-xl-3 mx-auto mt-3">
-              <h5 className="text-uppercase mb-4 font-weight-bold">QualiCheck</h5>
+              <h5 className="text-uppercase mb-4 font-weight-bold">
+                QualiCheck
+              </h5>
               <p>
                 Evalúa, mejora y asegura la calidad de tu software de forma
                 eficiente.
@@ -107,7 +113,9 @@ const Navbar = () => {
             </div>
 
             <div className="col-md-4 col-lg-2 col-xl-2 mx-auto mt-3">
-              <h5 className="text-uppercase mb-4 font-weight-bold">Follow Us</h5>
+              <h5 className="text-uppercase mb-4 font-weight-bold">
+                Follow Us
+              </h5>
               <a
                 href="https://facebook.com"
                 className="btn btn-primary btn-floating m-1"

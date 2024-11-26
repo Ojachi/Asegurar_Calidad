@@ -65,8 +65,14 @@ const EvaluationPage = () => {
       alert("Debe seleccionar un software antes de continuar.");
       return;
     }
-    setTimeout(() => navigate("/user/evaluate"), 1000);
-    closeModal();
+    if (!localStorage.getItem('matriz')){
+      setTimeout(() => navigate("/user/evaluate"), 1000);
+      closeModal();
+    }
+    else {
+      setTimeout(() => navigate("/user/risk-matrix"), 1000);
+      closeModal();
+    }
   };
 
   return (
@@ -96,6 +102,19 @@ const EvaluationPage = () => {
                 </td>
               </tr>
             ))}
+            <tr>
+              <td>Matriz de riesgos</td>
+              <td>
+                <button
+                onClick={() => {
+                  localStorage.setItem("matriz", true);
+                  openModal();
+                }}
+                >
+                  Evaluar
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

@@ -120,7 +120,7 @@ const UserHome = () => {
         <button onClick={() => navigate("/user/evaluate-software")}>
           Evaluar Software
         </button>
-        <button onClick={() => navigate("/user/view-reports")}>
+        <button onClick={() => navigate("/user/view-evaluations")}>
           Ver Reportes
         </button>
       </div>

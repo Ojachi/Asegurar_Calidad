@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { getUserEvaluations, getEvaluationDetails } from "../services/evaluationService";
+import {
+  getUserEvaluations,
+  getEvaluationDetails,
+} from "../services/evaluationService";
+import {
+  getUserRiskMatrices,
+  getRiskMatrixDetails,
+} from "../services/riskService";
 
 const UserEvaluationResults = () => {
-  const [evaluations, setEvaluations] = useState([]); // Lista de evaluaciones
-  const [selectedEvaluation, setSelectedEvaluation] = useState(null); // Evaluación seleccionada
+  const [evaluations, setEvaluations] = useState([]);
+  const [riskMatrices, setRiskMatrices] = useState([]);
+  const [selectedEvaluation, setSelectedEvaluation] = useState(null);
+  const [selectedRiskMatrix, setSelectedRiskMatrix] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   const id_user = localStorage.getItem("id");
@@ -11,27 +20,38 @@ const UserEvaluationResults = () => {
   useEffect(() => {
     const fetchEvaluations = async () => {
       try {
-        const data = await getUserEvaluations(id_user); // Llama al servicio para obtener evaluaciones
-        setEvaluations(data); // Se espera que el backend devuelva un array de evaluaciones
+        const evals = await getUserEvaluations(id_user);
+        setEvaluations(evals);
+        const risks = await getUserRiskMatrices(id_user);
+        setRiskMatrices(risks);
       } catch (error) {
-        setErrorMessage("Error al cargar los resultados de las evaluaciones.");
+        setErrorMessage("Error al cargar los resultados.");
       }
     };
     fetchEvaluations();
   }, [id_user]);
 
-  const handleViewDetails = async (evaluationId) => {
+  const handleViewEvaluationDetails = async (evaluationId) => {
     try {
-      const details = await getEvaluationDetails(evaluationId); // Obtén los detalles de la evaluación
-      setSelectedEvaluation(details); // Cambia a la vista de detalles
-      console.log(details); // Debug: Ver los detalles en la consola
+      const details = await getEvaluationDetails(evaluationId);
+      setSelectedEvaluation(details);
     } catch (error) {
       setErrorMessage("Error al cargar los detalles de la evaluación.");
     }
   };
 
+  const handleViewRiskMatrixDetails = async (riskId) => {
+    try {
+      const details = await getRiskMatrixDetails(riskId);
+      setSelectedRiskMatrix(details);
+    } catch (error) {
+      setErrorMessage("Error al cargar los detalles de la matriz de riesgos.");
+    }
+  };
+
   const handleBackToList = () => {
-    setSelectedEvaluation(null); // Regresa a la lista de evaluaciones
+    setSelectedEvaluation(null);
+    setSelectedRiskMatrix(null);
   };
 
   return (
@@ -52,38 +72,77 @@ const UserEvaluationResults = () => {
                 <th>Valor</th>
                 <th>Máximo</th>
                 <th>% Resultado</th>
-                
               </tr>
             </thead>
             <tbody>
-              {selectedEvaluation.data.requirements.map((requirement, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{requirement.requirement_name}</td>
-                  <td>{requirement.requirement_description}</td>
-                  <td>{requirement.value}</td>
-                  <td>{requirement.val_max}</td>
-                  <td>{parseFloat(requirement.porcentaje)}%</td>                 
-                </tr>
-              ))}
+              {selectedEvaluation.data.requirements.map(
+                (requirement, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{requirement.requirement_name}</td>
+                    <td>{requirement.requirement_description}</td>
+                    <td>{requirement.value}</td>
+                    <td>{requirement.val_max}</td>
+                    <td>{parseFloat(requirement.porcentaje)}%</td>
+                  </tr>
+                )
+              )}
             </tbody>
           </table>
           <div className="evaluation-summary">
             <p>
-              <strong>Total Puntaje:</strong> {selectedEvaluation.data.total_score} /{" "}
+              <strong>Total Puntaje:</strong>{" "}
+              {selectedEvaluation.data.total_score} /{" "}
               {selectedEvaluation.data.total_max_score}
             </p>
             <p>
-              <strong>% Global:</strong> {parseFloat(selectedEvaluation.data.global_percentage)}%
+              <strong>% Global:</strong>{" "}
+              {parseFloat(selectedEvaluation.data.global_percentage)}%
             </p>
           </div>
           <button onClick={handleBackToList}>Volver a la Lista</button>
         </div>
+      ) : selectedRiskMatrix ? (
+        <div className="risk-matrix-details">
+          <h3>Detalles de la Matriz de Riesgos</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Codigo</th>
+                <th>Descripción</th>
+                <th>Fase</th>
+                <th>Causa</th>
+                <th>Probabilidad</th>
+                <th>Impacto</th>
+                <th>P x I</th>
+                <th>Nivel</th>
+                <th>Mitigación</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedRiskMatrix.map((risk, index) => (
+                <tr key={index}>
+                  <td>{risk.code}</td>
+                  <td>{risk.description_risk}</td>
+                  <td>{risk.fase_affected}</td>
+                  <td>{risk.cause_root}</td>
+                  <td>{risk.probability}</td>
+                  <td>{risk.impact}</td>
+                  <td>{risk.probability_impact}</td>
+                  <td>{risk.level_risk}</td>
+                  <td>{risk.plan_mitigatino}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <button onClick={handleBackToList}>Volver</button>
+        </div>
       ) : (
         // Vista de Lista de Evaluaciones
         <div>
+          <h3>Evaluaciones Modelos</h3>
           {evaluations.length === 0 ? (
-            <p>No hay evaluaciones registradas.</p>
+            <p>No hay resultados registradas.</p>
           ) : (
             <table className="evaluation-table">
               <thead>
@@ -100,10 +159,52 @@ const UserEvaluationResults = () => {
                   <tr key={evaluation.evaluation_id}>
                     <td>{evaluation.software_name}</td>
                     <td>{evaluation.model_name}</td>
-                    <td>{new Date(evaluation.date_evaluation).toLocaleDateString()}</td>
+                    <td>
+                      {new Date(
+                        evaluation.date_evaluation
+                      ).toLocaleDateString()}
+                    </td>
                     <td>{evaluation.total_point}</td>
                     <td>
-                      <button onClick={() => handleViewDetails(evaluation.evaluation_id)}>Ver Detalles</button>
+                      <button
+                        onClick={() =>
+                          handleViewEvaluationDetails(evaluation.evaluation_id)
+                        }
+                      >
+                        Ver Detalles
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          <h3>Matrices de Riesgos</h3>
+          {riskMatrices.length === 0 ? (
+            <p>No hay matrices de riesgos registradas.</p>
+          ) : (
+            <table className="risk-matrix-table">
+              <thead>
+                <tr>
+                  <th>Software</th>
+                  <th>Descripción</th>
+                  <th>Fase</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {riskMatrices.map((risk) => (
+                  <tr key={risk.id}>
+                    <td>{risk.software_name}</td>
+                    <td>{risk.description_risk}</td>
+                    <td>{risk.fase_affected}</td>
+                    <td>
+                      <button
+                        onClick={() => handleViewRiskMatrixDetails(risk.id)}
+                      >
+                        Ver Detalles
+                      </button>
                     </td>
                   </tr>
                 ))}
