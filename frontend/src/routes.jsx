@@ -5,10 +5,8 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import AdminHome from "./pages/AdminHome";
 import UserHome from "./pages/UserHome";
 import RiskMatrix from "./components/RiskMatrix";
-import Report from "./pages/Report";
 import AdminManageQuestions from "./pages/AdminManageQuestions";
 import UserEvaluationResults from "./pages/UserEvaluationResults";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -19,11 +17,9 @@ import Navbar from "./components/Navbar";
 import AboutUs from "./pages/AboutUs";
 import EvaluationPage from "./pages/EvaluationPage";
 import EvaluationForm from "./components/EvaluationForm";
-import { getUserRole } from './services/authService';
 
 function AppRoutes() {
   // Obtener el rol del usuario desde el localStorage
-  const role = getUserRole();
   return (
     <Router>
       <Routes>
@@ -49,7 +45,7 @@ function AppRoutes() {
             path="/user/evaluate-software"
             element={
               <ProtectedRoute>
-                {role === "1" ? <EvaluationPage /> : <Navigate to="/login" />}
+                {localStorage.getItem('role') === "1" ? <EvaluationPage /> : <Navigate to="/login" />}
               </ProtectedRoute>
             }
           />
@@ -57,7 +53,7 @@ function AppRoutes() {
             path="/user/evaluate"
             element={
               <ProtectedRoute>
-                {role === "1" ? <EvaluationForm /> : <Navigate to="/login" />}
+                {localStorage.getItem('role') === "1" ? <EvaluationForm /> : <Navigate to="/login" />}
               </ProtectedRoute>
             }
           />
@@ -65,15 +61,7 @@ function AppRoutes() {
             path="/user/risk-matrix"
             element={
               <ProtectedRoute>
-                {role === "1" ? <RiskMatrix /> : <Navigate to="/login" />}
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/user/view-reports"
-            element={
-              <ProtectedRoute>
-                {role === "1" ? <Report /> : <Navigate to="/login" />}
+                {localStorage.getItem('role') === "1" ? <RiskMatrix /> : <Navigate to="/login" />}
               </ProtectedRoute>
             }
           />
@@ -81,7 +69,7 @@ function AppRoutes() {
             path="/user/view-evaluations"
             element={
               <ProtectedRoute>
-                {role === "1" ? (
+                {localStorage.getItem('role') === "1" ? (
                   <UserEvaluationResults />
                 ) : (
                   <Navigate to="/admin" />
@@ -93,21 +81,12 @@ function AppRoutes() {
           <Route path="*" element={<Navigate to="/NotFound" />} />
         </Route>
 
-        {/* Dashboard del Administrador */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <AdminHome />
-            </ProtectedRoute>
-          }
-        />
         {/* Rutas para Administradores */}
         <Route
           path="/admin/manage-questions"
           element={
             <ProtectedRoute>
-              {role === "0" ? (
+              {localStorage.getItem('role') === '0' ? (
                 <AdminManageQuestions />
               ) : (
                 <Navigate to="/user" />

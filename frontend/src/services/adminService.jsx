@@ -22,40 +22,51 @@ export const getQuestions = async () => {
   }
 };
 
-// Agregar una nueva pregunta
-export const addQuestion = async (description) => {
+export const getModels = async () => {
   try {
-    const token = getToken();
-    await axios.post(
-      `${API_URL}/questions`,
-      { description },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+      const token = getToken();
+      const response = await axios.get(`${API_URL}/models`, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+      return response.data;
   } catch (error) {
-    console.error(
-      "Error al agregar pregunta:",
-      error.response?.data || error.message
-    );
-    throw error;
+      console.error('Error al obtener modelos:', error.response?.data || error.message);
+      throw error;
   }
 };
 
-// Eliminar una pregunta
-export const deleteQuestion = async (questionId) => {
+export const getRequirements = async (modelId) => {
   try {
-    const token = getToken();
-    await axios.delete(`${API_URL}/questions/${questionId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+      const token = getToken();
+      const response = await axios.get(`${API_URL}/requirements/${modelId}`, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+      return response.data;
   } catch (error) {
-    console.error(
-      "Error al eliminar pregunta:",
-      error.response?.data || error.message
-    );
-    throw error;
+      console.error('Error al obtener requerimientos:', error.response?.data || error.message);
+      throw error;
   }
 };
-// Obtener todas las evaluaciones realizadas por los usuarios
 
+export const addQuestion = async (description, requirementId) => {
+  try {
+      const token = getToken();
+      await axios.post(
+          `${API_URL}/questions`,
+          { description, requirement: requirementId },
+          {
+              headers: { Authorization: `Bearer ${token}` },
+          }
+      );
+  } catch (error) {
+      console.error(
+          'Error al agregar pregunta:',
+          error.response?.data || error.message
+      );
+      throw error;
+  }
+};

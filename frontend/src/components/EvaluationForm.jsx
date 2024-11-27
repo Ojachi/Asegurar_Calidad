@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { getEvaluationQuestions, submitEvaluation } from "../services/evaluationService";
+import {
+  getEvaluationQuestions,
+  submitEvaluation,
+} from "../services/evaluationService";
 import { useNavigate } from "react-router-dom";
 
 const EvaluationForm = () => {
@@ -49,8 +52,9 @@ const EvaluationForm = () => {
       }, 0);
 
       const totalMaximoPosible = preguntas.length * 3; // Total máximo posible
-      const porcentajeGlobalRequerimiento = 
-        (puntajeRequerimiento * req.requirement_percentage) / totalMaximoPosible;
+      const porcentajeGlobalRequerimiento =
+        (puntajeRequerimiento * req.requirement_percentage) /
+        totalMaximoPosible;
 
       return {
         requirement_id: req.requirement_id, // Aquí se incluye el ID del requerimiento
@@ -90,7 +94,7 @@ const EvaluationForm = () => {
         softwareId,
         results,
         modelResult,
-        id_model
+        id_model,
       });
       localStorage.removeItem("model");
       localStorage.removeItem("selectedSoftwareId");
@@ -110,34 +114,41 @@ const EvaluationForm = () => {
       <h2>Evaluación de Software</h2>
       {currentRequirement ? (
         <>
-          <div className="requirement-info">
+          <div className="requeriment-info">
             <h3>{currentRequirement.requirement_name}</h3>
             <p>{currentRequirement.requirement_description}</p>
+            <hr />
           </div>
-          <form>
+          <form className="form-inline"> 
             {currentRequirement.questions.map((question) => (
-              <div key={question.question_id} className="question-item">
-                <label>{question.question_text}</label>
-                <select
-                  value={responses[question.question_id] || ""}
-                  onChange={(e) =>
-                    handleResponseChange(question.question_id, e.target.value)
-                  }
-                  required
-                >
-                  <option value="">Seleccione una puntuación</option>
-                  <option value="1">1 - En desacuerdo</option>
-                  <option value="2">2 - De acuerdo</option>
-                  <option value="3">3 - Totalmente de acuerdo</option>
-                </select>
+              <div key={question.question_id} className="form-group ">
+                <label className="col-sm-8 col-form-label ">
+                  {question.question_text}
+                </label>
+                
+                  <select
+                    value={responses[question.question_id] || ""}
+                    onChange={(e) =>
+                      handleResponseChange(question.question_id, e.target.value)
+                    }
+                    className=""
+                    id="selectEdit"
+                    required
+                  >
+                    <option value="">Seleccione una puntuación</option>
+                    <option value="1">1 - En desacuerdo</option>
+                    <option value="2">2 - De acuerdo</option>
+                    <option value="3">3 - Totalmente de acuerdo</option>
+                  </select>
+                  <hr />
               </div>
             ))}
           </form>
           <div className="navigation-buttons">
             {currentRequirementIndex < requirements.length - 1 ? (
-              <button onClick={handleNext}>Siguiente</button>
+              <button className="btn btn-primary" onClick={handleNext}>Siguiente</button>
             ) : (
-              <button onClick={handleSubmit}>Enviar</button>
+              <button className="btn btn-success" onClick={handleSubmit}>Enviar</button>
             )}
           </div>
         </>

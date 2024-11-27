@@ -25,34 +25,38 @@
 </head>
 <body>
     <h1>Reporte de Evaluación</h1>
-    <h2>Detalles de la Evaluación</h2>
+    <h2>Detalles de la Matriz de riesgos</h2>
     <h3>Aplicado al software {{ evaluation_data[0].software_name }}</h3>
     <h3>Evaluado con el modelo: {{ evaluation_data[0].model_name }}</h3>
     <table>
         <thead>
             <tr>
-                <th>Requerimiento</th>
+                <th>Codigo</th>
                 <th>Descripción</th>
-                <th>Valor</th>
-                <th>Máximo</th>
-                <th>% Resultado</th>
-                <th>% Max. Posible</th>
+                <th>Fase</th>
+                <th>Causa</th>
+                <th>Probabilidad</th>
+                <th>Impacto</th>
+                <th>Probabilidad x Impacto</th>
+                <th>Nivel De Risgo</th>
+                <th>Mitigación</th>
             </tr>
         </thead>
         <tbody>
             {% for item in evaluation_data %}
             <tr>
-                <td>{{ item.requirement_name }}</td>
-                <td>{{ item.requirement_description }}</td>
-                <td>{{ item.value }}</td>
-                <td>{{ item.val_max }}</td>
-                <td>{{ item.porcentaje }}%</td>
-                <td>{{item.requirement_percentage}}%</td>
+                <td>{{ item.code }}</td>
+                <td>{{ item.description_risk }}</td>
+                <td>{{ item.fase_affected }}</td>
+                <td>{{ item.cause_root }}</td>
+                <td>{{ item.probability }}</td>
+                <td>{{item.impact}}</td>
+                <td>{{item.probability_impact}}</td>
+                <td>{{item.level_risk}}</td>
+                <td>{{item.plan_mitigatino}}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <h3>Puntaje Total: {{ evaluation_data[0].total_point }} / {{ evaluation_data[0].total_point_max }}</h3>
-    <h3>% Global: {{ evaluation_data[0].porc_global }}%</h3>
 </body>
 </html>

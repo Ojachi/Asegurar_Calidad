@@ -18,7 +18,7 @@ const Login = () => {
       if (response.role === 0) {
         
         alert("inicio de sesion exitoso. Redirigiendo Dashboard de admin...")
-        setTimeout(() => navigate("/admin"), 2000);
+        setTimeout(() => navigate("/admin/manage-questions"), 2000);
       } else {
         
         alert("inicio de sesion exitoso. Redirigiendo Dashboard de usuario...")

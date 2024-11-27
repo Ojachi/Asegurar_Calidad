@@ -1,4 +1,4 @@
-from models.question_model import create_question, get_all_questions, update_question, delete_question
+from models.question_model import create_question, get_all_questions, get_models, get_requirements_by_model
 
 def add_question(text, requirement):
     create_question(text, requirement)
@@ -7,10 +7,8 @@ def add_question(text, requirement):
 def get_questions():
     return get_all_questions()
 
-def edit_question(question_id, text):
-    update_question(question_id, text)
-    return True
+def get_all_models():
+    return get_models()
 
-def remove_question(question_id):
-    delete_question(question_id)
-    return True
+def get_requirements_by_models(model_id):
+    return get_requirements_by_model(model_id)

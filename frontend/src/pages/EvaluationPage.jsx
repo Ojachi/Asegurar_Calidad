@@ -76,11 +76,11 @@ const EvaluationPage = () => {
   };
 
   return (
-    <>
+    <div className="evaluationPage"> 
       <h1>Modelos</h1>
       {serverResponse && <p style={{ color: "red" }}>{serverResponse}</p>}
       <div className="software-list-container">
-        <table className="hover">
+        <table className="table">
           <thead>
             <tr>
               <th>Nombre</th>
@@ -96,6 +96,7 @@ const EvaluationPage = () => {
                       localStorage.setItem("model", model.id);
                       openModal();
                     }}
+                    className="btn btn-success"
                   >
                     Evaluar
                   </button>
@@ -110,6 +111,7 @@ const EvaluationPage = () => {
                   localStorage.setItem("matriz", true);
                   openModal();
                 }}
+                className="btn btn-success"
                 >
                   Evaluar
                 </button>
@@ -135,6 +137,7 @@ const EvaluationPage = () => {
               evaluarIda();
             }}
           >
+            <p></p>
             <select
               name="softwareName"
               id="softwareName"
@@ -152,15 +155,16 @@ const EvaluationPage = () => {
                 </option>
               ))}
             </select>
+            <p></p>
 
-            <button type="submit">Evaluar Software</button>
-            <button type="button" className="button alert" onClick={closeModal}>
+            <button type="submit" className="btn btn-primary">Evaluar Software</button>
+            <button type="button" className="btn btn-warning" onClick={closeModal}>
               Cancelar
             </button>
           </form>
         </>
       </Modal>
-    </>
+    </div>
   );
 };
 

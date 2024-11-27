@@ -27,17 +27,29 @@ export const getUserSoftware = async (userId) => {
     }
 };
 
-export const updateSoftware = async (userId) => {
+export const updateSoftware = async (softwareId, softwareData) => {
     try {
-        const response = await axios.put(`${API_URL}/software/${userId}`, {
-            headers: { Authorization: `Bearer ${getToken()}` }
-        });
-        return response.data.data;
+      const response = await axios.put(`${API_URL}/software/${softwareId}`, softwareData, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+      return response.data;
     } catch (error) {
-        console.error("Error al obtener software:", error.response?.data || error.message);
-        throw error;
+      console.error("Error al actualizar el software:", error.response?.data || error.message);
+      throw error;
     }
-};
+  };
+
+  export const deleteSoftware = async (softwareId) => {
+    try {
+      const response = await axios.delete(`${API_URL}/software/${softwareId}`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error al eliminar el software:", error.response?.data || error.message);
+      throw error;
+    }
+  };
 
 export const getModels = async () => {
     try {

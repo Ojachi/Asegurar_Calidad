@@ -92,16 +92,33 @@ def report_service(path):
     if not is_authenticated():
         return handle_error("No autorizado", 401)
 
-    response = requests.request(
-        method=request.method,
-        url=f"{REPORT_SERVICE_URL}/{path}",
-        json=request.json,
-        headers=request.headers
-    )
+    # Configurar headers para manejar el Authorization si es necesario
+    headers = {key: value for key, value in request.headers if key != 'Host'}
+
+    if request.method == 'GET':
+        # Realiza la petición al servicio de reporte
+        response = requests.get(f"{REPORT_SERVICE_URL}/{path}", headers=headers, stream=True)
+    else:
+        # Realiza la petición para otros métodos como POST
+        response = requests.request(
+            method=request.method,
+            url=f"{REPORT_SERVICE_URL}/{path}",
+            json=request.json,
+            headers=headers
+        )
+
+    # Si la respuesta es binaria (como el PDF)
+    if response.headers.get('Content-Type') == 'application/pdf':
+        return response.content, response.status_code, {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': response.headers.get('Content-Disposition', 'attachment; filename="report.pdf"')
+        }
+
+    # Para respuestas estándar en JSON
     return jsonify(response.json()), response.status_code
 
 # Rutas para el servicio de usuarios
-@gateway_bp.route('/user/<path:path>', methods=['GET', 'POST', 'DELETE'])
+@gateway_bp.route('/user/<path:path>', methods=['GET', 'POST', 'DELETE', 'PUT'])
 def user_service(path):
     if not is_authenticated():
         return handle_error("No autorizado", 401)
@@ -111,6 +128,11 @@ def user_service(path):
             method=request.method,
             url=f"{USER_SERVICE_URL}/{path}"
         )
+    elif request.method == 'DELETE': 
+        response = requests.request(
+            method=request.method,
+            url=f"{USER_SERVICE_URL}/{path}"
+        )    
     else:
         response = requests.request(
             method=request.method,

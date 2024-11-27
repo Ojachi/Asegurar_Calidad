@@ -42,7 +42,8 @@ def get_evaluations_by_user(id_user):
                 m.name AS model_name,
                 rm.date_evaluation,
                 rm.total_point,
-                rm.porc_global
+                rm.porc_global,
+                rm.total_point_max
             FROM 
                 result_model rm
             JOIN 
@@ -69,6 +70,7 @@ def get_evaluation_details_model(evaluation_id):
                 rr.id AS requirement_id,
                 r.name AS requirement_name,
                 r.description AS requirement_description,
+                r.requirement_percentage AS requirement_percentage,
                 rr.value,
                 rr.val_max,
                 rr.porcentaje

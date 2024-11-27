@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from services.admin_service import add_question, get_questions, edit_question, remove_question
+from services.admin_service import add_question, get_questions, get_all_models, get_requirements_by_models
 from utils import handle_error, success_response
 
 admin_bp = Blueprint('admin', __name__)
@@ -24,18 +24,14 @@ def create_question():
     add_question(description, requirement)
     return success_response("Pregunta creada exitosamente")
 
-@admin_bp.route('/questions/<int:question_id>', methods=['PUT'])
-def update_question(question_id):
-    data = request.json
-    text = data.get('text')
+@admin_bp.route('/models', methods=['GET'])
+def list_models():
+    models = get_all_models()
+    return success_response(models)
 
-    if not text:
-        return handle_error("Faltan datos", 400)
+@admin_bp.route('/requirements/<int:model_id>', methods=['GET'])
+def list_requirements(model_id):
+    requirements = get_requirements_by_models(model_id)
+    return success_response(requirements)
 
-    edit_question(question_id, text)
-    return success_response("Pregunta actualizada exitosamente")
 
-@admin_bp.route('/questions/<int:question_id>', methods=['DELETE'])
-def delete_question(question_id):
-    remove_question(question_id)
-    return success_response("Pregunta eliminada exitosamente")

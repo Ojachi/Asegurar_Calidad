@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from services.user_service import register_software, get_user_software, remove_software, get_software_models
+from services.user_service import register_software, get_user_software, remove_software, get_software_models,update_software_service
 from utils import handle_error, success_response
 from datetime import datetime
 
@@ -27,8 +27,13 @@ def create_software():
 @user_bp.route('/software/<int:user_id>', methods=['GET'])
 def list_software(user_id):
     software_list = get_user_software(user_id)
-    print (software_list)
     return success_response(software_list)
+
+@user_bp.route('/software/<int:software_id>', methods=['PUT'])
+def update_software(software_id):
+    data = request.json
+    update_software_service(software_id, data)
+    return success_response("Software actualizado exitosamente")
 
 @user_bp.route('/software/<int:software_id>', methods=['DELETE'])
 def delete_software(software_id):

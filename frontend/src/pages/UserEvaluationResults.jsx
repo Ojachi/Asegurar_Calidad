@@ -7,6 +7,8 @@ import {
   getUserRiskMatrices,
   getRiskMatrixDetails,
 } from "../services/riskService";
+import axios from "axios";
+import { getToken } from "../services/authService";
 
 const UserEvaluationResults = () => {
   const [evaluations, setEvaluations] = useState([]);
@@ -54,16 +56,66 @@ const UserEvaluationResults = () => {
     setSelectedRiskMatrix(null);
   };
 
+  const handleDownloadPdf = async (evaluationId) => {
+    try {
+      const token = getToken();
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/report/generate-pdf/${evaluationId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob", // Esto asegura que se reciba como archivo binario
+        }
+      );
+
+      // Crear un enlace temporal para descargar el PDF
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `evaluation_${evaluationId}.pdf`); // Nombre del archivo
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error al descargar el PDF:", error);
+      alert("No se pudo descargar el PDF. Inténtalo nuevamente.");
+    }
+  };
+
+  const handleDownloadPdfRisk = async (riskId) => {
+    try {
+      const token = getToken();
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/report/generate-pdf-risk/${riskId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob", // Esto asegura que se reciba como archivo binario
+        }
+      );
+
+      // Crear un enlace temporal para descargar el PDF
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Matriz_${riskId}.pdf`); // Nombre del archivo
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error al descargar el PDF:", error);
+      alert("No se pudo descargar el PDF. Inténtalo nuevamente.");
+    }
+  };
+
   return (
-    <div className="evaluation-results-container">
+    <div className="evaluation-result-container">
       <h2>Resultados de Evaluación</h2>
       {errorMessage && <p className="error">{errorMessage}</p>}
 
       {/* Vista de Detalles */}
       {selectedEvaluation ? (
-        <div className="evaluation-details">
+        <div className="contenedorModelos1">
           <h3>Detalles de la Evaluación</h3>
-          <table className="evaluation-details-table">
+          <table className="table">
             <thead>
               <tr>
                 <th>Código</th>
@@ -72,6 +124,7 @@ const UserEvaluationResults = () => {
                 <th>Valor</th>
                 <th>Máximo</th>
                 <th>% Resultado</th>
+                <th>% Maximo Posible</th>
               </tr>
             </thead>
             <tbody>
@@ -84,28 +137,33 @@ const UserEvaluationResults = () => {
                     <td>{requirement.value}</td>
                     <td>{requirement.val_max}</td>
                     <td>{parseFloat(requirement.porcentaje)}%</td>
+                    <td>{parseFloat(requirement.requirement_percentage)}%</td>
                   </tr>
                 )
               )}
             </tbody>
           </table>
           <div className="evaluation-summary">
-            <p>
-              <strong>Total Puntaje:</strong>{" "}
-              {selectedEvaluation.data.total_score} /{" "}
-              {selectedEvaluation.data.total_max_score}
+            <p className="porc_global">
+              <strong>Total Puntaje</strong>{" "}
+              <div className="result">
+                {selectedEvaluation.data.total_score} /{" "}
+                {selectedEvaluation.data.total_max_score}
+              </div>
             </p>
-            <p>
-              <strong>% Global:</strong>{" "}
-              {parseFloat(selectedEvaluation.data.global_percentage)}%
+            <p className="porc_global">
+              <strong>% Global</strong>{" "}
+              <div className="result">
+                {parseFloat(selectedEvaluation.data.global_percentage)}%
+              </div>
             </p>
           </div>
-          <button onClick={handleBackToList}>Volver a la Lista</button>
+          <button onClick={handleBackToList} className="btn btn-secondary" >Volver a la Lista</button>
         </div>
       ) : selectedRiskMatrix ? (
-        <div className="risk-matrix-details">
+        <div className="contenedorModelos1">
           <h3>Detalles de la Matriz de Riesgos</h3>
-          <table>
+          <table className="table">
             <thead>
               <tr>
                 <th>Codigo</th>
@@ -114,8 +172,8 @@ const UserEvaluationResults = () => {
                 <th>Causa</th>
                 <th>Probabilidad</th>
                 <th>Impacto</th>
-                <th>P x I</th>
-                <th>Nivel</th>
+                <th>Probabilidad x Impacto</th>
+                <th>Nivel De Risgo</th>
                 <th>Mitigación</th>
               </tr>
             </thead>
@@ -135,16 +193,16 @@ const UserEvaluationResults = () => {
               ))}
             </tbody>
           </table>
-          <button onClick={handleBackToList}>Volver</button>
+          <button onClick={handleBackToList} className="btn btn-secondary" >Volver</button>
         </div>
       ) : (
         // Vista de Lista de Evaluaciones
-        <div>
+        <div className="contenedorModelos">
           <h3>Evaluaciones Modelos</h3>
           {evaluations.length === 0 ? (
             <p>No hay resultados registradas.</p>
           ) : (
-            <table className="evaluation-table">
+            <table className="table">
               <thead>
                 <tr>
                   <th>Software</th>
@@ -156,7 +214,7 @@ const UserEvaluationResults = () => {
               </thead>
               <tbody>
                 {evaluations.map((evaluation) => (
-                  <tr key={evaluation.evaluation_id}>
+                  <tr className="" key={evaluation.evaluation_id}>
                     <td>{evaluation.software_name}</td>
                     <td>{evaluation.model_name}</td>
                     <td>
@@ -164,14 +222,25 @@ const UserEvaluationResults = () => {
                         evaluation.date_evaluation
                       ).toLocaleDateString()}
                     </td>
-                    <td>{evaluation.total_point}</td>
+                    <td>
+                      {evaluation.total_point} / {evaluation.total_point_max}
+                    </td>
                     <td>
                       <button
                         onClick={() =>
                           handleViewEvaluationDetails(evaluation.evaluation_id)
                         }
+                        className="btn btn-info"
                       >
                         Ver Detalles
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleDownloadPdf(evaluation.evaluation_id)
+                        }
+                        className="btn btn-secondary acciondownload"
+                      >
+                        Descargar PDF
                       </button>
                     </td>
                   </tr>
@@ -184,7 +253,7 @@ const UserEvaluationResults = () => {
           {riskMatrices.length === 0 ? (
             <p>No hay matrices de riesgos registradas.</p>
           ) : (
-            <table className="risk-matrix-table">
+            <table className="table">
               <thead>
                 <tr>
                   <th>Software</th>
@@ -202,8 +271,15 @@ const UserEvaluationResults = () => {
                     <td>
                       <button
                         onClick={() => handleViewRiskMatrixDetails(risk.id)}
+                        className="btn btn-info"
                       >
                         Ver Detalles
+                      </button>
+                      <button
+                        onClick={() => handleDownloadPdfRisk(risk.id)}
+                        className="btn btn-secondary acciondownload"
+                      >
+                        Descargar PDF
                       </button>
                     </td>
                   </tr>

@@ -3,7 +3,7 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import { logout } from "../services/authService";
 
 const Navbar = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   const handleLogout = () => {
     logout();
@@ -60,7 +60,7 @@ const Navbar = () => {
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="/user">
-                  Registro de software
+                  Gestion de software
                 </a>
               </li>
               <li className="nav-item">

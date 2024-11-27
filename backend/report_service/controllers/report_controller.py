@@ -1,28 +1,23 @@
-from flask import Blueprint, request, send_file
-from services.report_service import generate_pdf_report, get_user_reports
-from utils import handle_error, success_response
+from flask import Blueprint, send_file
+from services.report_service import generate_pdf_report, generate_pdf_report_risk
+from utils import handle_error
 
 report_bp = Blueprint('report', __name__)
 
-@report_bp.route('/generate', methods=['POST'])
-def generate_report():
-    data = request.json
-    user_id = data.get('user_id')
-    software_id = data.get('software_id')
-    evaluation_results = data.get('evaluation_results')
-    risk_results = data.get('risk_results')
-
-    if not all([user_id, software_id, evaluation_results, risk_results]):
-        return handle_error("Faltan datos", 400)
-
-    pdf_path = generate_pdf_report(user_id, software_id, evaluation_results, risk_results)
-    return success_response({"pdf_path": pdf_path})
-
-@report_bp.route('/download/<int:report_id>', methods=['GET'])
-def download_report(report_id):
-    reports = get_user_reports(report_id)
-    if not reports:
-        return handle_error("Reporte no encontrado", 404)
+@report_bp.route('/generate-pdf/<int:evaluation_id>', methods=['GET'])
+def generate_evaluation_pdf(evaluation_id):
+    try:
+        pdf_path = generate_pdf_report(evaluation_id)
+        return send_file(pdf_path, as_attachment=True, mimetype='application/pdf')
+    except Exception as e:
+        return handle_error(f"Error al generar el PDF: {str(e)}", 500)
     
-    pdf_path = reports[0]['pdf_path']
-    return send_file(pdf_path, as_attachment=True)
+    
+@report_bp.route('/generate-pdf-risk/<int:riskId>', methods=['GET'])
+def generate_evaluation_pdf_risk(riskId):
+    try:
+        pdf_path = generate_pdf_report_risk(riskId)
+        return send_file(pdf_path, as_attachment=True, mimetype='application/pdf')
+    except Exception as e:
+        return handle_error(f"Error al generar el PDF: {str(e)}", 500)
+
