@@ -23,9 +23,10 @@ const UserEvaluationResults = () => {
     const fetchEvaluations = async () => {
       try {
         const evals = await getUserEvaluations(id_user);
-        setEvaluations(evals);
+        setEvaluations(evals.data);
         const risks = await getUserRiskMatrices(id_user);
         setRiskMatrices(risks);
+
       } catch (error) {
         setErrorMessage("Error al cargar los resultados.");
       }
@@ -257,26 +258,28 @@ const UserEvaluationResults = () => {
               <thead>
                 <tr>
                   <th>Software</th>
-                  <th>Descripción</th>
-                  <th>Fase</th>
+                  <th>Fecha</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {riskMatrices.map((risk) => (
-                  <tr key={risk.id}>
+                  <tr key={risk.id_matrix}>
                     <td>{risk.software_name}</td>
-                    <td>{risk.description_risk}</td>
-                    <td>{risk.fase_affected}</td>
+                    <td>
+                      {new Date(
+                        risk.date_evaluation
+                      ).toLocaleDateString()}
+                    </td>
                     <td>
                       <button
-                        onClick={() => handleViewRiskMatrixDetails(risk.id)}
+                        onClick={() => handleViewRiskMatrixDetails(risk.id_matrix)}
                         className="btn btn-info"
                       >
                         Ver Detalles
                       </button>
                       <button
-                        onClick={() => handleDownloadPdfRisk(risk.id)}
+                        onClick={() => handleDownloadPdfRisk(risk.id_matrix)}
                         className="btn btn-secondary acciondownload"
                       >
                         Descargar PDF

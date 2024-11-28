@@ -51,7 +51,7 @@ export const getUserEvaluations = async (id_user) => {
         const response = await axios.get(`${API_URL}/user-evaluations/${id_user}`, {
             headers: { Authorization: `Bearer ${token}` },
         });
-        return response.data.data;
+        return response.data;
     } catch (error) {
         console.error('Error al obtener evaluaciones:', error.response?.data || error.message);
         throw error;

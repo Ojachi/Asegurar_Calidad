@@ -42,6 +42,14 @@ const UserHome = () => {
   const [owner, setOwner] = useState("");
   const [license, setLicense] = useState("");
   const [company, setCompany] = useState("");
+  const [nameEdit, setNameEdit] = useState("");
+  const [versionEdit, setVersionEdit] = useState("");
+  const [descriptionEdit, setDescriptionEdit] = useState("");
+  const [developerEdit, setDeveloperEdit] = useState("");
+  const [contactEdit, setContactEdit] = useState("");
+  const [ownerEdit, setOwnerEdit] = useState("");
+  const [licenseEdit, setLicenseEdit] = useState("");
+  const [companyEdit, setCompanyEdit] = useState("");
 
   useEffect(() => {
     const fetchSoftware = async () => {
@@ -80,14 +88,14 @@ const UserHome = () => {
 
   const handleEdit = (software) => {
     // Rellenar los campos del formulario con los datos del software a editar
-    setName(software.name);
-    setVersion(software.version);
-    setDescription(software.description);
-    setDeveloper(software.name_development);
-    setContact(software.phone_development);
-    setOwner(software.owner);
-    setLicense(software.license);
-    setCompany(software.company);
+    setNameEdit(software.name);
+    setVersionEdit(software.version);
+    setDescriptionEdit(software.description);
+    setDeveloperEdit(software.name_development);
+    setContactEdit(software.phone_development);
+    setOwnerEdit(software.owner);
+    setLicenseEdit(software.license);
+    setCompanyEdit(software.company);
 
     // Configurar el modal para edición
     setModalType("editSoftware");
@@ -98,14 +106,14 @@ const UserHome = () => {
     e.preventDefault();
     try {
       await updateSoftware(softwareId, {
-        name,
-        version,
-        description,
-        name_development: developer,
-        phone_development: contact,
-        owner,
-        license,
-        company,
+        name: nameEdit,
+        version: versionEdit,
+        description: descriptionEdit,
+        name_development: developerEdit,
+        phone_development: contactEdit,
+        owner: ownerEdit,
+        license: licenseEdit,
+        company: companyEdit,
       });
       setServerResponse("Software actualizado exitosamente");
       closeModal();
@@ -332,8 +340,8 @@ const UserHome = () => {
                 <label>Nombre:</label>
                 <input
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={nameEdit}
+                  onChange={(e) => setNameEdit(e.target.value)}
                   className="form-control"
                   required
                 />
@@ -342,8 +350,8 @@ const UserHome = () => {
                 <label>Versión:</label>
                 <input
                   type="text"
-                  value={version}
-                  onChange={(e) => setVersion(e.target.value)}
+                  value={versionEdit}
+                  onChange={(e) => setVersionEdit(e.target.value)}
                   className="form-control"
                   required
                 />
@@ -351,8 +359,8 @@ const UserHome = () => {
               <div className="form-group">
                 <label>Descripción:</label>
                 <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  value={descriptionEdit}
+                  onChange={(e) => setDescriptionEdit(e.target.value)}
                   className="form-control"
                   required
                 />
@@ -361,8 +369,8 @@ const UserHome = () => {
                 <label>Desarrollador:</label>
                 <input
                   type="text"
-                  value={developer}
-                  onChange={(e) => setDeveloper(e.target.value)}
+                  value={developerEdit}
+                  onChange={(e) => setDeveloperEdit(e.target.value)}
                   className="form-control"
                   required
                 />
@@ -371,8 +379,8 @@ const UserHome = () => {
                 <label>Contacto:</label>
                 <input
                   type="email"
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
+                  value={contactEdit}
+                  onChange={(e) => setContactEdit(e.target.value)}
                   className="form-control"
                   required
                 />
@@ -381,8 +389,8 @@ const UserHome = () => {
                 <label>Propietario:</label>
                 <input
                   type="text"
-                  value={owner}
-                  onChange={(e) => setOwner(e.target.value)}
+                  value={ownerEdit}
+                  onChange={(e) => setOwnerEdit(e.target.value)}
                   className="form-control"
                   required
                 />
@@ -391,8 +399,8 @@ const UserHome = () => {
                 <label>Licencia:</label>
                 <input
                   type="text"
-                  value={license}
-                  onChange={(e) => setLicense(e.target.value)}
+                  value={licenseEdit}
+                  onChange={(e) => setLicenseEdit(e.target.value)}
                   className="form-control"
                   required
                 />
@@ -401,8 +409,8 @@ const UserHome = () => {
                 <label>Company:</label>
                 <input
                   type="text"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
+                  value={companyEdit}
+                  onChange={(e) => setCompanyEdit(e.target.value)}
                   className="form-control"
                   required
                 />

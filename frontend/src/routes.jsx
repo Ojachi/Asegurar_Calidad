@@ -35,7 +35,7 @@ function AppRoutes() {
             path="/user"
             element={
               <ProtectedRoute>
-                <UserHome /> 
+                <UserHome />
               </ProtectedRoute>
             }
           />
@@ -45,7 +45,7 @@ function AppRoutes() {
             path="/user/evaluate-software"
             element={
               <ProtectedRoute>
-                {localStorage.getItem('role') === "1" ? <EvaluationPage /> : <Navigate to="/login" />}
+                <EvaluationPage /> :
               </ProtectedRoute>
             }
           />
@@ -53,7 +53,7 @@ function AppRoutes() {
             path="/user/evaluate"
             element={
               <ProtectedRoute>
-                {localStorage.getItem('role') === "1" ? <EvaluationForm /> : <Navigate to="/login" />}
+                <EvaluationForm />
               </ProtectedRoute>
             }
           />
@@ -61,7 +61,7 @@ function AppRoutes() {
             path="/user/risk-matrix"
             element={
               <ProtectedRoute>
-                {localStorage.getItem('role') === "1" ? <RiskMatrix /> : <Navigate to="/login" />}
+                <RiskMatrix />
               </ProtectedRoute>
             }
           />
@@ -69,11 +69,7 @@ function AppRoutes() {
             path="/user/view-evaluations"
             element={
               <ProtectedRoute>
-                {localStorage.getItem('role') === "1" ? (
-                  <UserEvaluationResults />
-                ) : (
-                  <Navigate to="/admin" />
-                )}
+                <UserEvaluationResults />
               </ProtectedRoute>
             }
           />
@@ -86,11 +82,7 @@ function AppRoutes() {
           path="/admin/manage-questions"
           element={
             <ProtectedRoute>
-              {localStorage.getItem('role') === '0' ? (
-                <AdminManageQuestions />
-              ) : (
-                <Navigate to="/user" />
-              )}
+              <AdminManageQuestions />
             </ProtectedRoute>
           }
         />

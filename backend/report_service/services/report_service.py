@@ -92,7 +92,7 @@ def generate_pdf_report_risk(riskId):
                    r.plan_mitigatino, r.code, s.name AS softwareName
                 FROM resul_matriz r
                 INNER JOIN software s ON r.id_software = s.id
-                WHERE r.id = %s
+                WHERE r.id_matrix = %s
                 """,
                 (riskId,)
             )

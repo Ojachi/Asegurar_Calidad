@@ -9,8 +9,6 @@ const EvaluationForm = () => {
   const [requirements, setRequirements] = useState([]); // Lista de requerimientos
   const [responses, setResponses] = useState({}); // Respuestas del usuario
   const [currentRequirementIndex, setCurrentRequirementIndex] = useState(0); // Índice del requerimiento actual
-  const [results, setResults] = useState([]); // Resultados de los requerimientos
-  const [modelResult, setModelResult] = useState(null); // Resultados globales del modelo
   const navigate = useNavigate();
 
   const id_model = localStorage.getItem("model");
@@ -43,59 +41,55 @@ const EvaluationForm = () => {
     }
   };
 
-  // Calcular los resultados
-  const calculateResults = () => {
-    const requerimientoResultados = requirements.map((req) => {
-      const preguntas = req.questions;
-      const puntajeRequerimiento = preguntas.reduce((total, pregunta) => {
-        return total + (responses[pregunta.question_id] || 0); // Suma de los puntajes
-      }, 0);
-
-      const totalMaximoPosible = preguntas.length * 3; // Total máximo posible
-      const porcentajeGlobalRequerimiento =
-        (puntajeRequerimiento * req.requirement_percentage) /
-        totalMaximoPosible;
-
-      return {
-        requirement_id: req.requirement_id, // Aquí se incluye el ID del requerimiento
-        puntaje_requerimiento: puntajeRequerimiento,
-        total_maximo_posible: totalMaximoPosible,
-        porcentaje_global: porcentajeGlobalRequerimiento,
-      };
-    });
-
-    const puntajeTotal = requerimientoResultados.reduce(
-      (total, req) => total + req.puntaje_requerimiento,
-      0
-    );
-    const puntajeMaximoPosible = requerimientoResultados.reduce(
-      (total, req) => total + req.total_maximo_posible,
-      0
-    );
-    const porcentajeGlobalModelo = requerimientoResultados.reduce(
-      (total, req) => total + req.porcentaje_global,
-      0
-    );
-
-    setResults(requerimientoResultados);
-    setModelResult({
-      puntaje_total: puntajeTotal,
-      puntaje_maximo_posible: puntajeMaximoPosible,
-      porcentaje_global_modelo: porcentajeGlobalModelo,
-    });
-  };
-
   // Enviar los resultados al backend
   const handleSubmit = async () => {
-    calculateResults();
-
     try {
+      // Calcula los resultados directamente dentro de handleSubmit
+      const requerimientoResultados = requirements.map((req) => {
+        const preguntas = req.questions;
+        const puntajeRequerimiento = preguntas.reduce((total, pregunta) => {
+          return total + (responses[pregunta.question_id] || 0);
+        }, 0);
+  
+        const totalMaximoPosible = preguntas.length * 3;
+        const porcentajeGlobalRequerimiento =
+          (puntajeRequerimiento * req.requirement_percentage) /
+          totalMaximoPosible;
+  
+        return {
+          requirement_id: req.requirement_id,
+          puntaje_requerimiento: puntajeRequerimiento,
+          total_maximo_posible: totalMaximoPosible,
+          porcentaje_global: porcentajeGlobalRequerimiento,
+        };
+      });
+  
+      const puntajeTotal = requerimientoResultados.reduce(
+        (total, req) => total + req.puntaje_requerimiento,
+        0
+      );
+      const puntajeMaximoPosible = requerimientoResultados.reduce(
+        (total, req) => total + req.total_maximo_posible,
+        0
+      );
+      const porcentajeGlobalModelo = requerimientoResultados.reduce(
+        (total, req) => total + req.porcentaje_global,
+        0
+      );
+  
+      // Envía los datos calculados directamente
       await submitEvaluation({
         softwareId,
-        results,
-        modelResult,
+        results: requerimientoResultados,
+        modelResult: {
+          puntaje_total: puntajeTotal,
+          puntaje_maximo_posible: puntajeMaximoPosible,
+          porcentaje_global_modelo: porcentajeGlobalModelo,
+        },
         id_model,
       });
+  
+      // Limpia el almacenamiento local y redirige
       localStorage.removeItem("model");
       localStorage.removeItem("selectedSoftwareId");
       alert("Evaluación enviada correctamente.");
@@ -105,6 +99,7 @@ const EvaluationForm = () => {
       alert("Hubo un error al enviar la evaluación.");
     }
   };
+  
 
   // Requerimiento actual
   const currentRequirement = requirements[currentRequirementIndex];

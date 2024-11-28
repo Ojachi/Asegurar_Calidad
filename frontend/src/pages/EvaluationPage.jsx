@@ -21,13 +21,14 @@ const customModalStyles = {
 Modal.setAppElement("#root");
 
 const EvaluationPage = () => {
+  const navigate = useNavigate();
   const [modelList, setModelList] = useState([]);
   const [serverResponse, setServerResponse] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [softwareList, setSoftwareList] = useState([]);
   const [selectedSoftware, setSelectedSoftware] = useState(null);
   const id_user = localStorage.getItem("id");
-  const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchModels = async () => {
